@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [state, setState] = useState();
+  const [list, setList] = useState();
   const [show, setShow] = useState();
   const [inputData, setInputData] = useState({
     date: "",
@@ -21,7 +21,7 @@ function App() {
     const dataTable = await result.json();
     try {
       if (dataTable) {
-        setState(dataTable);
+        setList(dataTable);
         setShow(dataTable);
       }
     } catch (error) {
@@ -29,45 +29,39 @@ function App() {
     }
   };
 
-  function Search() {
-    console.log("data", state);
-    const filterDate = state
-      .filter((items) => {
-        if (inputData.date == "") {
-          return items;
-        } else if (
-          items?.createdAt.toLowerCase() === inputData?.date.toLowerCase()
-        ) {
-          return items;
-        }
-      })
-      .filter((items) => {
-        if (inputData.id == "") {
-          return items;
-        } else if (items?.id.toLowerCase() === inputData?.id.toLowerCase()) {
-          return items;
-        }
-      })
-      .filter((items) => {
-        if (inputData.name == "") {
-          return items;
-        } else if (
-          items?.name.toLowerCase() === inputData?.name.toLowerCase()
-        ) {
-          return items;
-        }
-      });
-    setShow(filterDate);
-  }
+  const Search = () => {
+    console.log("data", list);
+    console.log(inputData.id, ":id");
+    console.log(inputData.name, ":name");
+    const { date, id, name } = inputData;
 
-  function Clear() {
+    const filterDate = list.filter((item) => {
+      var filtername =
+        name != ""
+          ? item.name.toLowerCase() === inputData.name.toLowerCase()
+          : true;
+      var filterid =
+        id != "" ? item.id.toLowerCase() === inputData.id.toLowerCase() : true;
+      var filterdate =
+        date != ""
+          ? item.createdAt
+              .toLowerCase()
+              .indexOf(inputData.date.toLowerCase()) !== -1
+          : true;
+      return filtername && filterid && filterdate;
+    });
+    console.log(filterDate, "data");
+    setShow(filterDate);
+  };
+
+  const Clear = () => {
     setInputData({
       date: "",
       id: "",
       name: "",
     });
-    getData();
-  }
+    setShow(list);
+  };
 
   return (
     <div className="App">
@@ -117,7 +111,12 @@ function App() {
               <td>{item.name}</td>
             </tr>
           ))}
-          {show == "" && <h2>Record Not Found</h2>}
+
+          {show == "" && (
+            <tr>
+              <td colSpan={3}>Record Not Found</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
