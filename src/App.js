@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [state, setState] = useState();
+  const [show, setShow] = useState();
   const [inputData, setInputData] = useState({
     date: "",
     id: "",
     name: "",
   });
+
   useEffect(() => {
     getData();
   }, []);
@@ -20,6 +22,7 @@ function App() {
     try {
       if (dataTable) {
         setState(dataTable);
+        setShow(dataTable);
       }
     } catch (error) {
       console.log("list error", error);
@@ -27,12 +30,13 @@ function App() {
   };
 
   function Search() {
+    console.log("data", state);
     const filterDate = state
       .filter((items) => {
         if (inputData.date == "") {
           return items;
         } else if (
-          items.createdAt.toLowerCase() === inputData?.date.toLowerCase()
+          items?.createdAt.toLowerCase() === inputData?.date.toLowerCase()
         ) {
           return items;
         }
@@ -40,22 +44,20 @@ function App() {
       .filter((items) => {
         if (inputData.id == "") {
           return items;
-        } else if (items.id.toLowerCase() === inputData.id.toLowerCase()) {
+        } else if (items?.id.toLowerCase() === inputData?.id.toLowerCase()) {
           return items;
         }
       })
       .filter((items) => {
         if (inputData.name == "") {
           return items;
-        } else if (items.name.toLowerCase() === inputData.name.toLowerCase()) {
+        } else if (
+          items?.name.toLowerCase() === inputData?.name.toLowerCase()
+        ) {
           return items;
         }
       });
-
-    setState(filterDate);
-    if (inputData.date == "" && inputData.id == "" && inputData.name == "") {
-      getData();
-    }
+    setShow(filterDate);
   }
 
   function Clear() {
@@ -108,13 +110,14 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {state?.map((item) => (
+          {show?.map((item) => (
             <tr key={item.id}>
               <td>{item.createdAt}</td>
               <td>{item.id}</td>
               <td>{item.name}</td>
             </tr>
           ))}
+          {show == "" && <h2>Record Not Found</h2>}
         </tbody>
       </table>
     </div>
