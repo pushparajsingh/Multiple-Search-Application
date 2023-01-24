@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  background-color: black;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding-bottom: 10px;
 }
 
 .App-logo {
@@ -35,4 +39,24 @@
   to {
     transform: rotate(360deg);
   }
+}
+.marginRight {
+  margin-right: 20px;
+}
+
+label {
+  color: white;
+}
+
+.spacelabel {
+  margin-right: 10px;
+}
+.fontsmall {
+  margin-right: 10px;
+}
+#table {
+  width: 50%;
+}
+#idBox {
+  width: 3%;
 }

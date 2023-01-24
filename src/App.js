@@ -1,6 +1,10 @@
 import "./App.css";
 import { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+import moment from "moment/moment";
 
+import Header from "./header";
 function App() {
   const [list, setList] = useState();
   const [show, setShow] = useState();
@@ -65,50 +69,66 @@ function App() {
 
   return (
     <div className="App">
-      <label>Date</label>
+      <Header />
+      <label className="spacelabel">ID</label>
       <input
         type={"text"}
         className="marginTop marginRight"
-        onChange={(e) => {
-          setInputData({ ...inputData, date: e.target.value });
-        }}
-        value={inputData.date}
-      />
-      <label>ID</label>
-      <input
-        type={"text"}
-        className="marginTop marginRight"
+        id="idBox"
         value={inputData.id}
         onChange={(e) => setInputData({ ...inputData, id: e.target.value })}
       />
-      <label>Name</label>
+      <label className="spacelabel">Name</label>
       <input
         type={"text"}
         className="marginTop marginRight"
         value={inputData.name}
         onChange={(e) => setInputData({ ...inputData, name: e.target.value })}
       />
-      <button onClick={() => Search()}>Search</button>&nbsp;
-      <button onClick={() => Clear()}>Clear</button>
-      <table
-        cellPadding={"10px"}
-        border={"2px"}
+      <label className="spacelabel">Date</label>
+      <input
+        type="date"
+        name="date"
+        className="marginTop marginRight"
+        onChange={(e) => {
+          setInputData({ ...inputData, date: e.target.value });
+        }}
+        value={
+          inputData.date
+            ? moment(new Date(inputData.date)).format("YYYY-MM-DD")
+            : ""
+        }
+        autoComplete="on"
+      />
+      <Button variant="outline-light fontsmall" onClick={() => Search()}>
+        Search
+      </Button>
+      &nbsp;
+      <Button variant="outline-light fontsmall" onClick={() => Clear()}>
+        Clear
+      </Button>
+      <Table
+        striped
+        bordered
+        hover
+        variant="dark"
         align={"center"}
         className="marginTop"
+        id="table"
       >
         <thead>
           <tr>
-            <th>createdAt</th>
             <th>ID</th>
             <th>Name</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
           {show?.map((item) => (
             <tr key={item.id}>
-              <td>{item.createdAt}</td>
               <td>{item.id}</td>
               <td>{item.name}</td>
+              <td>{item.createdAt.slice(0, 10)}</td>
             </tr>
           ))}
 
@@ -118,7 +138,7 @@ function App() {
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }
